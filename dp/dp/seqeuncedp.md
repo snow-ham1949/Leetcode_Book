@@ -17,8 +17,6 @@ layout:
 
 #### [Fibonacci Number](https://leetcode.com/problems/fibonacci-number/)
 
-
-
 按照題目的規定列 dp 式跑迴圈就好了。
 
 ```cpp
@@ -227,5 +225,39 @@ public:
         return dp[n-1];
     }
 
+};
+```
+
+#### [Minimum Cost Tree From Leaf Values](https://leetcode.com/problems/minimum-cost-tree-from-leaf-values)
+
+這題看起來是樹 DP，但其實可以轉化為：給定一個陣列`A`，每次選擇陣列中相鄰的兩個元素`a`和`b`，移除較小的一個`min(a, b)`，這次操作的代價是`a * b`。問題求解的目標是找出移除整個陣列直到只剩一個元素的最小代價。
+
+使用 stack 來追踪可能的移除操作，以保證每次操作都能達到局部最優，從而達到全局最優。具體做法是：
+
+* 初始化一個棧`stk`，並將`INT_MAX`放入 stack ，以方便處理邊界情況。
+* 遍歷陣列`arr`中的每個元素`x`：
+  * 當當前元素`x`大於棧頂元素時，表示找到了一個局部的最小代價移除操作的機會。此時，將棧頂元素彈出，計算移除的代價（即棧頂元素與其下一個元素和`x`中較小者的乘積），並加到總代價`res`上。
+  * 將當前元素`x`推入棧中。
+* 最後，棧中除了`INT_MAX` 外可能還剩下一些元素，這些元素是按照從小到大的順序排列的。因此，從第二個元素開始，將每個元素與其前一個元素的乘積加到總代價`res`上就是答案。
+
+```cpp
+class Solution {
+public:
+    int mctFromLeafValues(vector<int>& arr) {
+        int res = 0;
+        vector<int> stk = {INT_MAX};
+        for (int x : arr) {
+            while (stk.back() <= x) {
+                int mid = stk.back();
+                stk.pop_back();
+                res += mid * min(stk.back(), x);
+            }
+            stk.push_back(x);
+        }
+        for (int i = 2; i < stk.size(); i++) {
+            res += stk[i] * stk[i - 1];
+        }
+        return res;
+    }
 };
 ```
