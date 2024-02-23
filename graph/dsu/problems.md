@@ -167,7 +167,7 @@ public:
 struct DSU {
     vector<int> p, sz;
     DSU(int n) : p(n), sz(n, 1) {
-        for (int i = 0; i < n; ++i) p[i] = i;
+        iota(p.begin(), p.end(), 0);
     }
     int find(int x) {
         return x == p[x] ? x : p[x] = find(p[x]);
@@ -203,9 +203,9 @@ public:
                 }
             }
         }
-        // 更新最大島嶼面積
+  
         for (int i = 0; i < n * n; ++i) res = max(res, dsu.size(i));
-        // 檢查每個 0，看看將其轉變為 1 後的最大島嶼面積
+ 
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (grid[i][j] == 0) {
@@ -286,7 +286,7 @@ public:
         });
         
         DSU dsu(n);
-        int j = 0; // edges index
+        int j = 0; 
         for (auto& [i, limit] : sortedQueries) {
             while (j < edges.size() && edges[j].first < limit) {
                 dsu._union(edges[j].second.first, edges[j].second.second);
