@@ -27,8 +27,7 @@ DSU可以應用在最小生成樹 (MST) 算法（例如Kruskal算法）和圖的
 struct DSU {
     int n;
     vector<int> p, sz;
-    DSU(int _n) : n(_n), sz(n, 1) {
-        p.resize(_n);
+    DSU(int _n) : p(_n), sz(n, 1) {
         iota(p.begin(), p.end(), 0);
     }
     int find(int x) {
